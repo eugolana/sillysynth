@@ -47,7 +47,7 @@ var switchToSquare = new Button(new Point(140,10), regButtonSize, square.color, 
 var switchToTriangle = new Button(new Point(200,10), regButtonSize, triangle.color, 'triangle', switchTo(triangle, synth))
 var switchToSawtooth = new Button(new Point(260,10), regButtonSize, sawtooth.color, 'sawtooth', switchTo(sawtooth, synth))
 
-
+var toggleSnap = new Button(new Point(10,10), regButtonSize, 'gray', 'snap', function(event) {grid.toggleSnap()})
 
 function onFrame() {
 	if (! pause) {

@@ -23,7 +23,7 @@ function Grid(octaves, steps, synth) {
 	this.currentNote;
 	this.selectedTone;
 	this.notes = [];
-	this.snapToGrid = true;
+	this.snapToGrid = false;
 	this.initUI();
 
 	this.grid.onMouseDown = this.initNote();
@@ -93,6 +93,10 @@ Grid.prototype.snap = function(point) {
 	var x = Math.floor((point.x / this.x_interval) + 0.5) * this.x_interval;
 	var y = Math.floor(point.y / this.y_interval) * this.y_interval;
 	return new paper.Point(x, y);
+}
+
+Grid.prototype.toggleSnap = function(){
+	this.snapToGrid = !this.snapToGrid;
 }
 
 function Tone(type, octave, color, volume, synth) {
