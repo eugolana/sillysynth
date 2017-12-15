@@ -4,7 +4,7 @@ function Synth(canvas, audioContext) {
 	this.width = canvas.width;
 	this.audioContext = audioContext;
 	this.masterGain = this.audioContext.createGain();
-	this.masterGain.value = 0.5;
+	this.masterGain.gain.value = 0.3;
 	this.masterGain.connect(this.audioContext.destination);
 	this.selectedTone;
 }
