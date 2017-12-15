@@ -233,6 +233,8 @@ Note.prototype.play = function(timer) {
 
 Note.prototype.silence = function() {
 	this.path.remove();
+	this.path = false;
+	this.osc.stop();
 }
 
 
@@ -255,6 +257,8 @@ Timer.prototype.step = function() {
 	}
 	this.line.translate(new paper.Point(this.x - this.line.firstSegment.point.x,0))
 	for (var i = 0; i < this.grid.notes.length; i++) {
-		this.grid.notes[i].play(this);
+		if (this.grid.notes[i].path) {
+			this.grid.notes[i].play(this);
+		}
 	}
 }
