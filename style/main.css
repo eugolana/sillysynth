@@ -16,3 +16,12 @@ html, body {
     display: block;
     position: fixed;
 }
+
+#info {
+	position: absolute;
+	display: block;
+	bottom: 10px;
+	right: 20px;
+	z-index: 2000;
+	font-size: 80%;
+}
