@@ -165,6 +165,30 @@ Note.prototype.initPath = function(point) {
 	this.path.strokeWidth = 3;
 	this.path.strokeColor = this.tone.color;
 
+	this.path.onMouseEnter = this.mouseEnter();
+	this.path.onMouseLeave = this.mouseLeave();
+	this.path.onClick = this.noteClick();
+}
+
+Note.prototype.noteClick = function() {
+		var note = this;
+		return function(event) {
+			note.silence();
+		}
+}
+
+Note.prototype.mouseEnter = function() {
+	var note = this;
+	return function(event) {
+		note.path.selected = true;
+	}
+}
+
+Note.prototype.mouseLeave = function() {
+	var note = this;
+	return function(event) {
+		note.path.selected = false;
+	}
 }
 
 Note.prototype.addPoint = function(point) {
@@ -205,6 +229,13 @@ Note.prototype.play = function(timer) {
 		this.path.opacity = 0.7;
 	}
 }
+
+
+Note.prototype.silence = function() {
+	this.path.remove();
+}
+
+
 
 function Timer( speed, grid) {
 	this.grid = grid;
