@@ -42,11 +42,11 @@ synth.setTone(sine);
 var grid = new Grid(2, 32, synth, 40);
 var timer = new Timer(3, grid);
 var regButtonSize = new Size(60,20)
-var switchToSine = new Button(new Point(90,10), regButtonSize, sine.color, 'sine', switchTo(sine, synth))
-var switchToSquare = new Button(new Point(160,10), regButtonSize, square.color, 'square', switchTo(square, synth))
-var switchToTriangle = new Button(new Point(220,10), regButtonSize, triangle.color, 'triangle', switchTo(triangle, synth))
-var switchToSawtooth = new Button(new Point(290,10), regButtonSize, sawtooth.color, 'sawtooth', switchTo(sawtooth, synth))
-var toggleSnap = new Button(new Point(10,10), regButtonSize, 'gray', 'snap to grid', function(event) {grid.toggleSnap()})
+var toggleSnap = new Button(new Point(10,10), new Size(90, 20), 'gray', 'snap to grid', function(event) {grid.toggleSnap()})
+var switchToSine = new Button(new Point(110,10), regButtonSize, sine.color, 'sine', switchTo(sine, synth))
+var switchToSquare = new Button(new Point(180,10), regButtonSize, square.color, 'square', switchTo(square, synth))
+var switchToTriangle = new Button(new Point(250,10), regButtonSize, triangle.color, 'triangle', switchTo(triangle, synth))
+var switchToSawtooth = new Button(new Point(320,10), regButtonSize, sawtooth.color, 'sawtooth', switchTo(sawtooth, synth))
 
 var helloText =  new PointText(new Point(canvas.width/2, 20))
 
