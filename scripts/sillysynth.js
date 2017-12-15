@@ -13,12 +13,15 @@ Synth.prototype.setTone = function(tone) {
 	this.selectedTone = tone;
 };
 
-function Grid(octaves, steps, synth) {
+function Grid(octaves, steps, synth, margin) {
 	this.synth = synth;
 	this.otaves = octaves;
 	this.steps = steps;
-	this.x_interval = this.synth.width / steps;
-	this.y_interval = this.synth.height / (octaves * 12);
+	this.margin = margin;
+	this.topLeft = new paper.Point(margin, margin)
+
+	this.x_interval = (this.synth.width - 2 * margin) / steps;
+	this.y_interval = (this.synth.height - 2 * margin) / (octaves * 12);
 
 	this.currentNote;
 	this.selectedTone;
@@ -32,13 +35,13 @@ function Grid(octaves, steps, synth) {
 }
 
 Grid.prototype.initUI = function() {
-	var rectangle = new paper.Rectangle(new paper.Point(0,0), 
-		new paper.Size(this.synth.width, this.synth.height))
+	var rectangle = new paper.Rectangle(new paper.Point(this.margin,this.margin), 
+		new paper.Size(this.synth.width - 2 * this.margin, this.synth.height - 2 * this.margin))
 	this.background = new paper.Path.Rectangle(rectangle);
 	this.background.fillColor = '#CCCCCC';
 	this.x_lines = new paper.Group()
 	for (var i = 0; i < this.x_interval; i++) {
-		var path = new paper.Path(new paper.Point(i * this.x_interval, 0), new paper.Point(i * this.x_interval, this.synth.height))
+		var path = new paper.Path(new paper.Point(i * this.x_interval, 0).add(this.topLeft), new paper.Point(i * this.x_interval + this.margin, this.synth.height - this.margin))
 		this.x_lines.addChild(path);
 	}
 	this.x_lines.strokeColor = 'black';
@@ -46,8 +49,8 @@ Grid.prototype.initUI = function() {
 	this.x_lines.opacity = 0.4
 
 	this.y_lines = new paper.Group()
-	for (var i = 0; i < this.y_interval; i++) {
-		var path = new paper.Path(new paper.Point(0, i * this.y_interval), new paper.Point(this.synth.width, i * this.y_interval))
+	for (var i = 0; i < this.y_interval + 1; i++) {
+		var path = new paper.Path(new paper.Point(0, i * this.y_interval).add(this.topLeft), new paper.Point(this.synth.width -  this.margin, i * this.y_interval + this.margin))
 		this.y_lines.addChild(path);
 	}
 	this.y_lines.strokeColor = 'black';
@@ -90,9 +93,10 @@ Grid.prototype.endNote = function() {
 }
 
 Grid.prototype.snap = function(point) {
-	var x = Math.floor((point.x / this.x_interval) + 0.5) * this.x_interval;
-	var y = Math.floor(point.y / this.y_interval) * this.y_interval;
-	return new paper.Point(x, y);
+	var point = point.subtract(this.topLeft)
+	var x =  Math.floor((point.x  / this.x_interval) + 0.5) * this.x_interval;
+	var y = Math.floor(point.y  / this.y_interval) * this.y_interval;
+	return new paper.Point(x, y).add(this.topLeft);
 }
 
 Grid.prototype.toggleSnap = function(){
@@ -188,7 +192,7 @@ Note.prototype.play = function(timer) {
 	if (intersections.length > 0) {
 		// only concerned with first intersection (should only really be one)
 		var intersection = intersections[0];
-		var pos = timer.grid.synth.height - intersection.point.y;
+		var pos = timer.grid.synth.height - intersection.point.y - this.grid.margin;
 		pos /= timer.grid.y_interval;
 		// 	if snaptogrid:
 		// 		pos = Math.floor(pos/this.grid.y_interval) * this.grid.y_interval;
@@ -202,11 +206,11 @@ Note.prototype.play = function(timer) {
 	}
 }
 
-function Timer(x, speed, grid) {
+function Timer( speed, grid) {
 	this.grid = grid;
-	this.x = x;
+	this.x = this.grid.margin;
 	this.speed = speed;
-	this.line = new paper.Path(new paper.Point(x,0), new paper.Point(x, this.grid.synth.height));
+	this.line = new paper.Path(this.grid.topLeft, new paper.Point(this.x, this.grid.synth.height - this.grid.margin));
 	// this.line.fullySelected = true;
 	this.line.strokeColor = 'blue';
 	this.line.strokeWidth = 4;
@@ -215,7 +219,9 @@ function Timer(x, speed, grid) {
 
 Timer.prototype.step = function() {
 	this.x += this.speed;
-	this.x %= this.grid.synth.width;
+	if (this.x >= this.grid.synth.width - this.grid.margin) {
+		this.x = this.grid.margin;
+	}
 	this.line.translate(new paper.Point(this.x - this.line.firstSegment.point.x,0))
 	for (var i = 0; i < this.grid.notes.length; i++) {
 		this.grid.notes[i].play(this);

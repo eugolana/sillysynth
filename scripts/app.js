@@ -39,13 +39,16 @@ var sawtooth = new Tone('sawtooth', 12, 'green', 0.5, synth);
 
 synth.setTone(sine);
 
-var grid = new Grid(2, 32, synth);
-var timer = new Timer(0, 3, grid);
+var grid = new Grid(2, 32, synth, 40);
+var timer = new Timer(3, grid);
 var regButtonSize = new Size(50,20)
 var switchToSine = new Button(new Point(80,10), regButtonSize, sine.color, 'sine', switchTo(sine, synth))
 var switchToSquare = new Button(new Point(140,10), regButtonSize, square.color, 'square', switchTo(square, synth))
 var switchToTriangle = new Button(new Point(200,10), regButtonSize, triangle.color, 'triangle', switchTo(triangle, synth))
 var switchToSawtooth = new Button(new Point(260,10), regButtonSize, sawtooth.color, 'sawtooth', switchTo(sawtooth, synth))
+
+var text = new PointText(new Point(canvas.width-250, 20))
+text.content = "click and drag to make sounds"
 
 var toggleSnap = new Button(new Point(10,10), regButtonSize, 'gray', 'snap', function(event) {grid.toggleSnap()})
 
