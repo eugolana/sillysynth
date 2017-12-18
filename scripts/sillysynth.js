@@ -119,11 +119,8 @@ function Button(pos, size, color, text, func) {
 	this.func = func;
 	this.rect = new paper.Rectangle(this.pos, this.size)
 	this.button = new paper.Path.Rectangle(this.rect);
-	// console.log('got button')
-	// console.log(this.button)
 	this.button.fillColor = color;
 	this.button.opacity = 0.5;
-	console.log(this.rect.bottomLeft)
 	this.text = new paper.PointText(this.rect.bottomLeft.add(new paper.Point(5, -5)))
 	this.text.content = text;
 	this.clickable = new paper.Group()
@@ -143,7 +140,6 @@ Button.prototype.turnOff = function() {
 
 function Note( tone, grid) {
 	this.grid = grid;
-	console.log(this.grid)
 	this.octave = tone.octave;
 	this.volume = tone.volume;
 	this.tone = tone;
