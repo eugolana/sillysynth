@@ -103,6 +103,12 @@ Grid.prototype.toggleSnap = function(){
 	this.snapToGrid = !this.snapToGrid;
 }
 
+Grid.prototype.pause = function(){
+	for (let i = 0; i < this.notes.length; i++) {
+		this.notes[i].pause();
+	} 
+}
+
 function Tone(type, octave, color, volume, synth) {
 	this.type = type;
 	this.octave = octave;
@@ -231,6 +237,10 @@ Note.prototype.silence = function() {
 	this.path.remove();
 	this.path = false;
 	this.osc.stop();
+}
+
+Note.prototype.pause = function() {
+	this.gain.gain.value = 0.0;
 }
 
 
